@@ -86,10 +86,7 @@ module Thumbor
 
     private def signature_for(key, path)
       return Thumbor.settings.key if Thumbor.settings.key == "unsafe"
-
-      URI.encode_www_form(
-        Base64.strict_encode(
-          OpenSSL::HMAC.digest(:sha1, key, path)))
+      Base64.urlsafe_encode(OpenSSL::HMAC.digest(:sha1, key, path))
     end
   end
 end
