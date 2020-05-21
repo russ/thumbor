@@ -7,14 +7,14 @@ module Thumbor
     property smart
 
     def initialize(@path : String)
-      @trim    = ""
-      @crop    = ""
-      @resize  = ""
-      @halign  = ""
-      @valign  = ""
+      @trim = ""
+      @crop = ""
+      @resize = ""
+      @halign = ""
+      @valign = ""
       @filters = [] of String
-      @smart   = false
-      @meta    = false
+      @smart = false
+      @meta = false
     end
 
     def trim(color_source : String? = nil, tolerance : Int32? = nil)
@@ -68,13 +68,13 @@ module Thumbor
 
       commands << "meta" if @metadata_only
 
-      commands << @trim    unless @trim == ""
-      commands << @crop    unless @crop == ""
-      commands << @resize  unless @resize == ""
-      commands << @halign  unless @halign == ""
-      commands << @valign  unless @valign == ""
+      commands << @trim unless @trim == ""
+      commands << @crop unless @crop == ""
+      commands << @resize unless @resize == ""
+      commands << @halign unless @halign == ""
+      commands << @valign unless @valign == ""
 
-      commands << "smart"  if @smart_crop
+      commands << "smart" if @smart_crop
 
       commands << @filters.join(":") unless @filters.empty?
 
@@ -86,7 +86,10 @@ module Thumbor
 
     private def signature_for(key, path)
       return Thumbor.settings.key if Thumbor.settings.key == "unsafe"
-      Base64.urlsafe_encode(OpenSSL::HMAC.digest(:sha1, key, path))
+
+      URI.encode_www_form(
+        Base64.strict_encode(
+          OpenSSL::HMAC.digest(:sha1, key, path)))
     end
   end
 end
